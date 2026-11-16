@@ -1190,7 +1190,13 @@ const rules = {
     'string',
     'const',
     $.hierarchical_identifier, // Out of LRM but supported by most tools
+    $.system_tf_call,          // $.constant_primary branch ($.constant_function_call)
+    alias($._casting_tf_call, $.tf_call), // $.constant_primary branch ($.constant_function_call)
+    $.text_macro_usage,        // Out of LRM
   ),
+
+  // Only calls with parentheses, so that a bare identifier stays a $.hierarchical_identifier
+  _casting_tf_call: $ => seq($.hierarchical_identifier, '(', optional($.list_of_arguments), ')'),
 
   data_type: $ => prec('data_type', choice(
     seq($.integer_vector_type, optional($._signing), repeat($.packed_dimension)),
